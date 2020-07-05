@@ -1,0 +1,191 @@
+[
+    {
+        "mode": "NULLABLE",
+        "name": "cnpj_fundo",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "denom_social",
+        "type": "STRING"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_reg",
+        "type": "DATE"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_const",
+        "type": "DATE"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_cancel",
+        "type": "DATE"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "sit",
+        "type": "STRING"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_ini_sit",
+        "type": "DATE"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_ini_ativ",
+        "type": "DATE"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_ini_exerc",
+        "type": "DATE"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_fim_exerc",
+        "type": "DATE"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "classe",
+        "type": "STRING"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_ini_classe",
+        "type": "DATE"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "rentab_fundo",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "condom",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "fundo_cotas",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "fundo_exclusivo",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "trib_lprazo",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "invest_qualif",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "taxa_perfm",
+        "type": "FLOAT"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "inf_taxa_perfm",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "taxa_adm",
+        "type": "FLOAT"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "inf_taxa_adm",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "vl_patrim_liq",
+        "type": "FLOAT"
+    },
+    {
+        "description": "%E4Y-%m-%d",
+        "mode": "NULLABLE",
+        "name": "dt_patrim_liq",
+        "type": "DATE"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "diretor",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "cnpj_admin",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "admin",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "pf_pj_gestor",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "cpf_cnpj_gestor",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "gestor",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "cnpj_auditor",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "auditor",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "cnpj_custodiante",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "custodiante",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "cnpj_controlador",
+        "type": "STRING"
+    },
+    {
+        "mode": "NULLABLE",
+        "name": "controlador",
+        "type": "STRING"
+    }
+]

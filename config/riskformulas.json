@@ -1,0 +1,16 @@
+{
+    "url": "http://www.b3.com.br/pesquisapregao/download?filelist={ftype}{date}.zip",
+    "name": "riskformulas",
+    "type": "prepared",
+    "timedelta": -1,
+    "parameters": {
+        "ftype": "FR",
+        "date": {
+            "type": "datetime",
+            "value": "%y%m%d"
+        }
+    },
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "RiskFormulas",
+    "ext": "zip"
+}

@@ -1,0 +1,16 @@
+{
+    "url": "http://www.b3.com.br/pesquisapregao/download?filelist={ftype}{date}.zip",
+    "name": "fpr",
+    "type": "prepared",
+    "timedelta": -1,
+    "parameters": {
+        "ftype": "FP",
+        "date": {
+            "type": "datetime",
+            "value": "%y%m%d"
+        }
+    },
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "FRP",
+    "ext": "zip"
+}

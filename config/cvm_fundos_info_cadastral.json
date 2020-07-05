@@ -1,0 +1,9 @@
+{
+    "url": "http://dados.cvm.gov.br/dados/FI/CAD/DADOS/inf_cadastral_fi_%Y%m%d.csv",
+    "name": "cvm_fundos_info_cadastral",
+    "type": "datetime",
+    "timedelta": -1,
+    "output_bucket": "ks-rawdata-cvm",
+    "prefix": "fundos/inf_cadastral_fi",
+    "ext": "csv"
+}

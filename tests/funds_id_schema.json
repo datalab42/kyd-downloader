@@ -1,0 +1,43 @@
+[
+  {
+    "mode": "NULLABLE", 
+    "name": "nr_cotst", 
+    "type": "INTEGER"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "captc_dia", 
+    "type": "FLOAT"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "resg_dia", 
+    "type": "FLOAT"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "cnpj_fundo", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "vl_patrim_liq", 
+    "type": "FLOAT"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "vl_quota", 
+    "type": "FLOAT"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "vl_total", 
+    "type": "FLOAT"
+  }, 
+  {
+    "description": "%E4Y-%m-%d", 
+    "mode": "NULLABLE", 
+    "name": "dt_comptc", 
+    "type": "DATE"
+  }
+]

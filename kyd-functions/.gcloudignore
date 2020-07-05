@@ -1,0 +1,11 @@
+*test.py
+bin/**
+include/**
+lib/**
+.Python
+.vscode/**
+*.xml
+*_test.py
+*.json
+__pycache__/**
+cvmxml.py

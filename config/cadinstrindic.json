@@ -1,0 +1,15 @@
+{
+    "url": "http://www.b3.com.br/pesquisapregao/download?filelist={ftype}{date}.zip",
+    "name": "cadinstrindic",
+    "type": "prepared",
+    "parameters": {
+        "ftype": "II",
+        "date": {
+            "type": "datetime",
+            "value": "%y%m%d"
+        }
+    },
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "CadInstrIndic",
+    "ext": "zip"
+}

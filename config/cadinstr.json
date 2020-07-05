@@ -1,0 +1,15 @@
+{
+    "url": "http://www.b3.com.br/pesquisapregao/download?filelist={ftype}{date}.zip",
+    "name": "cadinstr",
+    "type": "prepared",
+    "parameters": {
+        "ftype": "IN",
+        "date": {
+            "type": "datetime",
+            "value": "%y%m%d"
+        }
+    },
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "CadInstr",
+    "ext": "zip"
+}

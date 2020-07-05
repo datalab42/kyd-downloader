@@ -1,0 +1,15 @@
+{
+    "url": "http://www.b3.com.br/pesquisapregao/download?filelist={ftype}{date}.zip",
+    "name": "pricereport",
+    "type": "prepared",
+    "parameters": {
+        "ftype": "PR",
+        "date": {
+            "type": "datetime",
+            "value": "%y%m%d"
+        }
+    },
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "PricingReport",
+    "ext": "zip"
+}

@@ -1,0 +1,5 @@
+{
+    "url": "https://www.anbima.com.br/informacoes/vna/vna.asp",
+    "name": "vna_anbima",
+    "output_bucket": "ks-rawdata-anbima-vnatitpub"
+}

@@ -1,0 +1,7 @@
+{
+    "url": "https://www2.cetip.com.br/ConsultarTaxaDi/ConsultarTaxaDICetip.aspx",
+    "name": "cdi",
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "TaxaCDI",
+    "ext": "json"
+}

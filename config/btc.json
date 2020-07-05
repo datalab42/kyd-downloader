@@ -1,0 +1,9 @@
+{
+    "url": "http://www.b3.com.br/pt_br/produtos-e-servicos/emprestimo-de-ativos/renda-variavel/emprestimos-registrados/renda-variavel-8AE490CA64CD50310164D1EFD6412F1C.htm?data=%d/%m/%Y&f=0",
+    "name": "btc",
+    "type": "datetime",
+    "timedelta": -2,
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "BTC",
+    "ext": "html"
+}
