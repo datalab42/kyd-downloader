@@ -29,23 +29,23 @@ def download_by_config(config_data, save_func, refdate=None):
     config = json.loads(config_data)
     logging.info('content = %s', config)
     downloader = downloader_factory(**config)
-    logging.debug('Download weekdays %s', config.get('download_weekdays'))
+    logging.info('Download weekdays %s', config.get('download_weekdays'))
     if config.get('download_weekdays') and downloader.now.weekday() not in config.get('download_weekdays'):
-        logging.debug('Not a date to download. Weekday %s Download Weekdays %s', downloader.now.weekday(), config.get('download_weekdays'))
+        logging.info('Not a date to download. Weekday %s Download Weekdays %s', downloader.now.weekday(), config.get('download_weekdays'))
         return
-    refdate = refdate if refdate else downloader.now
+    # refdate = refdate if refdate else downloader.now
     fname, tfile, status_code = downloader.download(refdate=refdate)
     if status_code == 200:
         save_func(config, refdate, fname, tfile)
 
 
 def get_fname(fname, attrs, refdate, alt_ext='html', date_format='%Y-%m-%d'):
-    _date = refdate.strftime(date_format)
     prefix = attrs.get('prefix')
-    ext = attrs.get('ext', alt_ext)
     if fname:
         fname = '{}/{}'.format(prefix, fname) if prefix else fname
     else:
+        ext = attrs.get('ext', alt_ext)
+        _date = refdate.strftime(date_format)
         fname = '{}/{}.{}'.format(prefix, _date, ext) if prefix else '{}.{}'.format(_date, ext)
     return fname
 
@@ -90,13 +90,20 @@ class RawURLDownloader(SingleDownloader):
 class FormatDateURLDownloader(SingleDownloader):
     def download(self, refdate=None):
         refdate = refdate or self.now + timedelta(self.attrs.get('timedelta', 0))
+        logging.debug("REFDATE %s", refdate)
+        logging.debug("SELF NOW %s", self.now)
+        logging.debug("TIMEDELTA %s", self.attrs.get('timedelta', 0))
         self._url = refdate.strftime(self.attrs['url'])
         _, tfile, status_code = download_url(self._url)
         if status_code != 200:
             return None, None, status_code
-        _, ext = os.path.splitext(self._url)
-        ext = ext if ext != '' else '.{}'.format(self.attrs['ext'])
-        return '{}{}'.format(refdate.strftime('%Y-%m-%d'), ext), tfile, status_code
+        if self.attrs.get('use_filename'):
+            _, fname = os.path.split(self._url)
+        else:
+            _, ext = os.path.splitext(self._url)
+            ext = ext if ext != '' else '.{}'.format(self.attrs['ext'])
+            fname = '{}{}'.format(refdate.strftime('%Y-%m-%d'), ext)
+        return fname, tfile, status_code
 
 
 def get_date(dt):
