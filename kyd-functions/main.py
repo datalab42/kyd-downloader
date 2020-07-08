@@ -14,13 +14,12 @@ import lxml.html
 from google.cloud import storage
 from google.cloud import pubsub_v1
 
-from kyd.data.downloaders import downloader_factory, download_by_config, get_fname
+from kyd.data.downloaders import downloader_factory, download_by_config
 
 
 # TODO: this function saves the file to bucket based on its configuration
 # this might be thought as an object
-def save_file_to_output_bucket(attrs, refdate, fname, tfile):
-    fname = get_fname(fname, attrs, refdate)
+def save_file_to_output_bucket(attrs, fname, tfile):
     output_bucket_name = attrs['output_bucket']
     _save_file_to_bucket(output_bucket_name, fname, tfile)
 

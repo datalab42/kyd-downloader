@@ -33,25 +33,12 @@ def download_by_config(config_data, save_func, refdate=None):
     if config.get('download_weekdays') and downloader.now.weekday() not in config.get('download_weekdays'):
         logging.info('Not a date to download. Weekday %s Download Weekdays %s', downloader.now.weekday(), config.get('download_weekdays'))
         return
-    # refdate = refdate if refdate else downloader.now
     fname, tfile, status_code = downloader.download(refdate=refdate)
     if status_code == 200:
-        save_func(config, refdate, fname, tfile)
+        save_func(config, fname, tfile)
 
 
-def get_fname(fname, attrs, refdate, alt_ext='html', date_format='%Y-%m-%d'):
-    prefix = attrs.get('prefix')
-    if fname:
-        fname = '{}/{}'.format(prefix, fname) if prefix else fname
-    else:
-        ext = attrs.get('ext', alt_ext)
-        _date = refdate.strftime(date_format)
-        fname = '{}/{}.{}'.format(prefix, _date, ext) if prefix else '{}.{}'.format(_date, ext)
-    return fname
-
-
-def save_file_to_temp_folder(attrs, refdate, fname, tfile):
-    fname = get_fname(fname, attrs, refdate)
+def save_file_to_temp_folder(attrs, fname, tfile):
     fname = '/tmp/{}'.format(fname)
     logging.info('saving file %s', fname)
     os.makedirs(os.path.dirname(fname), exist_ok=True)
@@ -77,6 +64,16 @@ class SingleDownloader(ABC):
     def download(self, refdate=None):
         pass
 
+    def get_fname(self, fname, refdate):
+        prefix = self.attrs.get('prefix')
+        if fname:
+            fname = '{}/{}'.format(prefix, fname) if prefix else fname
+        else:
+            ext = self.attrs.get('ext', 'html')
+            _date = refdate.strftime(self.attrs.get('fname_format', '%Y-%m-%d'))
+            fname = '{}/{}.{}'.format(prefix, _date, ext) if prefix else '{}.{}'.format(_date, ext)
+        return fname
+
 
 class RawURLDownloader(SingleDownloader):
     def download(self, refdate=None):
@@ -84,7 +81,8 @@ class RawURLDownloader(SingleDownloader):
         _, tfile, status_code = download_url(self._url)
         if status_code != 200:
             return None, None, status_code
-        return None, tfile, status_code
+        fname = self.get_fname(None, self.now)
+        return fname, tfile, status_code
 
 
 class FormatDateURLDownloader(SingleDownloader):
@@ -103,7 +101,8 @@ class FormatDateURLDownloader(SingleDownloader):
             _, ext = os.path.splitext(self._url)
             ext = ext if ext != '' else '.{}'.format(self.attrs['ext'])
             fname = '{}{}'.format(refdate.strftime('%Y-%m-%d'), ext)
-        return fname, tfile, status_code
+        f_fname = self.get_fname(fname, refdate)
+        return f_fname, tfile, status_code
 
 
 def get_date(dt):
@@ -131,7 +130,9 @@ class FundosInfDiarioDownloader(SingleDownloader):
             return None, None, status_code
         _, ext = os.path.splitext(self._url)
         ext = ext if ext != '' else '.{}'.format(self.attrs['ext'])
-        return '{}/{}{}'.format(refmonth.strftime('%Y-%m'), refdate.strftime('%Y-%m-%d'), ext), tfile, status_code
+        fname = '{}/{}{}'.format(refmonth.strftime('%Y-%m'), refdate.strftime('%Y-%m-%d'), ext)
+        f_fname = self.get_fname(fname, refdate)
+        return f_fname, tfile, status_code
 
 
 class PreparedURLDownloader(SingleDownloader):
@@ -151,7 +152,8 @@ class PreparedURLDownloader(SingleDownloader):
         fname, temp_file, status_code = self._download_unzip_historical_data(self._url)
         if status_code != 200:
             return None, None, status_code
-        return fname, temp_file, status_code
+        f_fname = self.get_fname(fname, refdate)
+        return f_fname, temp_file, status_code
 
     def _download_unzip_historical_data(self, url):
         _, temp, status_code = download_url(url)
