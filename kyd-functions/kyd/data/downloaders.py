@@ -29,13 +29,40 @@ def download_by_config(config_data, save_func, refdate=None):
     config = json.loads(config_data)
     logging.info('content = %s', config)
     downloader = downloader_factory(**config)
+    download_time = datetime.utcnow().isoformat()
+    logging.info('Download time %s', download_time)
     logging.info('Download weekdays %s', config.get('download_weekdays'))
     if config.get('download_weekdays') and downloader.now.weekday() not in config.get('download_weekdays'):
         logging.info('Not a date to download. Weekday %s Download Weekdays %s', downloader.now.weekday(), config.get('download_weekdays'))
-        return
-    fname, tfile, status_code = downloader.download(refdate=refdate)
+        msg = 'Not a date to download. Weekday {} Download Weekdays {}'.format(downloader.now.weekday(), config.get('download_weekdays'))
+        return {
+            'message': msg,
+            'download_status': -1,
+            'status': -1,
+            'refdate': None,
+            'filename': None,
+            'bucket': config['output_bucket'],
+            'name': config['name'],
+            'time': download_time
+        }
+    fname, tfile, status_code, refdate = downloader.download(refdate=refdate)
     if status_code == 200:
         save_func(config, fname, tfile)
+        msg = 'File saved'
+        status = 0
+    else:
+        msg = 'File not saved'
+        status = 1
+    return {
+        'message': msg,
+        'download_status': status_code,
+        'status': status,
+        'refdate': refdate and refdate.strftime('%Y-%m-%d'),
+        'filename': fname,
+        'bucket': config['output_bucket'],
+        'name': config['name'],
+        'time': download_time
+    }
 
 
 def save_file_to_temp_folder(attrs, fname, tfile):
@@ -80,9 +107,9 @@ class RawURLDownloader(SingleDownloader):
         self._url = self.attrs['url']
         _, tfile, status_code = download_url(self._url)
         if status_code != 200:
-            return None, None, status_code
+            return None, None, status_code, None
         fname = self.get_fname(None, self.now)
-        return fname, tfile, status_code
+        return fname, tfile, status_code, None
 
 
 class FormatDateURLDownloader(SingleDownloader):
@@ -94,7 +121,7 @@ class FormatDateURLDownloader(SingleDownloader):
         self._url = refdate.strftime(self.attrs['url'])
         _, tfile, status_code = download_url(self._url)
         if status_code != 200:
-            return None, None, status_code
+            return None, None, status_code, refdate
         if self.attrs.get('use_filename'):
             _, fname = os.path.split(self._url)
         else:
@@ -102,7 +129,7 @@ class FormatDateURLDownloader(SingleDownloader):
             ext = ext if ext != '' else '.{}'.format(self.attrs['ext'])
             fname = '{}{}'.format(refdate.strftime('%Y-%m-%d'), ext)
         f_fname = self.get_fname(fname, refdate)
-        return f_fname, tfile, status_code
+        return f_fname, tfile, status_code, refdate
 
 
 def get_date(dt):
@@ -127,12 +154,12 @@ class FundosInfDiarioDownloader(SingleDownloader):
         self._url = refmonth.strftime(self.attrs['url'])
         _, tfile, status_code = download_url(self._url)
         if status_code != 200:
-            return None, None, status_code
+            return None, None, status_code, refdate
         _, ext = os.path.splitext(self._url)
         ext = ext if ext != '' else '.{}'.format(self.attrs['ext'])
         fname = '{}/{}{}'.format(refmonth.strftime('%Y-%m'), refdate.strftime('%Y-%m-%d'), ext)
         f_fname = self.get_fname(fname, refdate)
-        return f_fname, tfile, status_code
+        return f_fname, tfile, status_code, refdate
 
 
 class PreparedURLDownloader(SingleDownloader):
@@ -151,9 +178,9 @@ class PreparedURLDownloader(SingleDownloader):
         self._url = url.format(**params)
         fname, temp_file, status_code = self._download_unzip_historical_data(self._url)
         if status_code != 200:
-            return None, None, status_code
+            return None, None, status_code, refdate
         f_fname = self.get_fname(fname, refdate)
-        return f_fname, temp_file, status_code
+        return f_fname, temp_file, status_code, refdate
 
     def _download_unzip_historical_data(self, url):
         _, temp, status_code = download_url(url)

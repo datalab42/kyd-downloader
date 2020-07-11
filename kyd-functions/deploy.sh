@@ -12,3 +12,10 @@ gcloud functions deploy kyd-generic-download-publish \
     --env-vars-file .env.yaml \
     --project=kyd-storage-001
 
+gcloud functions deploy kyd-save-download-logs \
+    --entry-point gcf_save_download_logs \
+    --runtime python37 \
+    --trigger-topic kyd-storage-download-log \
+    --env-vars-file .env.yaml \
+    --project=kyd-storage-001
+

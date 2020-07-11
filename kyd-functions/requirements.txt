@@ -1,7 +1,8 @@
-requests==2.21.0
 -e git://github.com/wilsonfreitas/textparser.git#egg=textparser
+requests==2.21.0
 google-cloud-storage==1.18.0
 google-cloud-pubsub==1.0.0
+google-cloud-datastore==1.13.0
 lxml==4.3.0
 cssselect==1.0.3
 pytz==2019.2

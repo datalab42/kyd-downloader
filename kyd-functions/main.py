@@ -13,8 +13,10 @@ import lxml.html
 
 from google.cloud import storage
 from google.cloud import pubsub_v1
+from google.cloud import datastore
 
 from kyd.data.downloaders import downloader_factory, download_by_config
+from kyd.data.logs import save_download_logs
 
 
 # TODO: this function saves the file to bucket based on its configuration
@@ -49,7 +51,10 @@ def gcf_generic_download(event, context):
         # TODO: this is not good
         # this function download_by_config must be split
         # the settings to save the file must be handled here
-        download_by_config(input_data, save_file_to_output_bucket)
+        res = download_by_config(input_data, save_file_to_output_bucket)
+        topic_name = get_env_var('DOWNLOAD_LOG_TOPIC')
+        publisher = pubsub_v1.PublisherClient()
+        publisher.publish(topic_name, bytes(json.dumps(res), 'utf-8'))
     except Exception as ex:
         logging.error(ex)
 
@@ -79,3 +84,13 @@ def gcf_ignite_generic_downloads(request):
             continue
         logging.info('publishing %s', blob.path)
         publisher.publish(topic_name, blob.download_as_string())
+
+
+def gcf_save_download_logs(event, context):
+    input_data = base64.b64decode(event['data']).decode('utf-8')
+    try:
+        data = json.loads(input_data)
+        save_download_logs(data)
+    except Exception as ex:
+        logging.error(ex)
+
