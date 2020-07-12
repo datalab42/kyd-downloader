@@ -4,7 +4,7 @@ import os.path
 import logging
 import tempfile
 import zipfile
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 from abc import ABC, abstractmethod
 import json
 
@@ -29,8 +29,7 @@ def download_by_config(config_data, save_func, refdate=None):
     config = json.loads(config_data)
     logging.info('content = %s', config)
     downloader = downloader_factory(**config)
-    download_time = datetime.utcnow().isoformat()
-    logging.info('Download time %s', download_time)
+    download_time = datetime.now(timezone.utc).isoformat()
     logging.info('Download weekdays %s', config.get('download_weekdays'))
     if config.get('download_weekdays') and downloader.now.weekday() not in config.get('download_weekdays'):
         logging.info('Not a date to download. Weekday %s Download Weekdays %s', downloader.now.weekday(), config.get('download_weekdays'))
@@ -46,6 +45,8 @@ def download_by_config(config_data, save_func, refdate=None):
             'time': download_time
         }
     fname, tfile, status_code, refdate = downloader.download(refdate=refdate)
+    logging.info('Download time (UTC) %s', download_time)
+    logging.info('Refdate %s', refdate)
     if status_code == 200:
         save_func(config, fname, tfile)
         msg = 'File saved'
@@ -57,7 +58,7 @@ def download_by_config(config_data, save_func, refdate=None):
         'message': msg,
         'download_status': status_code,
         'status': status,
-        'refdate': refdate and refdate.strftime('%Y-%m-%d'),
+        'refdate': refdate and refdate.isoformat(),
         'filename': fname,
         'bucket': config['output_bucket'],
         'name': config['name'],
