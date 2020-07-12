@@ -1,6 +1,6 @@
 
 import sys
-sys.path.append('../kyd-functions/')
+sys.path.append('../functions/')
 from datetime import date
 from kyd.data.downloaders import get_month
 

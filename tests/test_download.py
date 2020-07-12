@@ -1,6 +1,6 @@
 
 import sys
-sys.path.append('../kyd-functions/')
+sys.path.append('../functions/')
 
 import kyd.data.downloaders as dw
 from kyd.data.logs import save_download_logs

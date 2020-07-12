@@ -1,7 +1,7 @@
 
 import sys
 import tempfile
-sys.path.append('../kyd-functions/')
+sys.path.append('../functions/')
 
 from kyd.data.anbima import parse_vnatitpub
 
