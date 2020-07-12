@@ -54,7 +54,9 @@ def gcf_generic_download(event, context):
         res = download_by_config(input_data, save_file_to_output_bucket)
         topic_name = get_env_var('DOWNLOAD_LOG_TOPIC')
         publisher = pubsub_v1.PublisherClient()
-        publisher.publish(topic_name, bytes(json.dumps(res), 'utf-8'))
+        future = publisher.publish(topic_name, bytes(json.dumps(res), 'utf-8'))
+        res = future.result()
+        logging.info('DownloagLog message sent to pubsub %s', res)
     except Exception as ex:
         logging.error(ex)
 
