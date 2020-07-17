@@ -1,6 +1,6 @@
 {
     "url": "http://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_%Y%m.csv",
-    "name": "cvm_fundos_informe_diario",
+    "name": "cvm_fundos_informe_diario_3",
     "type": "fundos_inf_diario",
     "timedelta": -1,
     "month_reference": -3,
