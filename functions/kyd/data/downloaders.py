@@ -44,26 +44,38 @@ def download_by_config(config_data, save_func, refdate=None):
             'name': config['name'],
             'time': download_time
         }
-    fname, tfile, status_code, refdate = downloader.download(refdate=refdate)
-    logging.info('Download time (UTC) %s', download_time)
-    logging.info('Refdate %s', refdate)
-    if status_code == 200:
-        save_func(config, fname, tfile)
-        msg = 'File saved'
-        status = 0
-    else:
-        msg = 'File not saved'
-        status = 1
-    return {
-        'message': msg,
-        'download_status': status_code,
-        'status': status,
-        'refdate': refdate and refdate.isoformat(),
-        'filename': fname,
-        'bucket': config['output_bucket'],
-        'name': config['name'],
-        'time': download_time
-    }
+    try:
+        fname, tfile, status_code, refdate = downloader.download(refdate=refdate)
+        logging.info('Download time (UTC) %s', download_time)
+        logging.info('Refdate %s', refdate)
+        if status_code == 200:
+            save_func(config, fname, tfile)
+            msg = 'File saved'
+            status = 0
+        else:
+            msg = 'File not saved'
+            status = 1
+        return {
+            'message': msg,
+            'download_status': status_code,
+            'status': status,
+            'refdate': refdate and refdate.isoformat(),
+            'filename': fname,
+            'bucket': config['output_bucket'],
+            'name': config['name'],
+            'time': download_time
+        }
+    except Exception as ex:
+        return {
+            'message': str(ex),
+            'download_status': -1,
+            'status': 2,
+            'refdate': None,
+            'filename': None,
+            'bucket': config['output_bucket'],
+            'name': config['name'],
+            'time': download_time
+        }
 
 
 def save_file_to_temp_folder(attrs, fname, tfile):

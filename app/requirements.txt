@@ -1,1 +1,4 @@
 Flask==1.1.2
+flask-table==0.5.0
+google-cloud-datastore==1.13.0
+pytz==2019.2
