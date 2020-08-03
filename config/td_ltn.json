@@ -1,0 +1,8 @@
+{
+    "url": "https://apiapex.tesouro.gov.br/aria/v1/sistd/custom/historico?ano=%Y&idSigla=2",
+    "name": "td_ltn",
+    "type": "datetime",
+    "output_bucket": "ks-rawdata-td",
+    "prefix": "LTN",
+    "use_content_disposition": true
+}

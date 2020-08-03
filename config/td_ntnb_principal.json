@@ -1,0 +1,8 @@
+{
+    "url": "https://apiapex.tesouro.gov.br/aria/v1/sistd/custom/historico?ano=%Y&idSigla=5",
+    "name": "td_ntnb_principal",
+    "type": "datetime",
+    "output_bucket": "ks-rawdata-td",
+    "prefix": "NTN-B-Principal",
+    "use_content_disposition": true
+}

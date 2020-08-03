@@ -1,0 +1,8 @@
+{
+    "url": "https://apiapex.tesouro.gov.br/aria/v1/sistd/custom/historico?ano=%Y&idSigla=1",
+    "name": "td_lft",
+    "type": "datetime",
+    "output_bucket": "ks-rawdata-td",
+    "prefix": "LFT",
+    "use_content_disposition": true
+}
