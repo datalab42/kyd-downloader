@@ -10,6 +10,7 @@ from itertools import dropwhile
 from io import StringIO
 
 import lxml.html
+import pytz
 
 from google.cloud import storage
 from google.cloud import pubsub_v1
@@ -51,12 +52,19 @@ def gcf_generic_download(event, context):
         # TODO: this is not good
         # this function download_by_config must be split
         # the settings to save the file must be handled here
-        res = download_by_config(input_data, save_file_to_output_bucket)
+        logging.info('Attributes %s', event['attributes'])
+        if event['attributes'] and event['attributes'].get('refdate'):
+            refdate = datetime.strptime(event['attributes'].get('refdate'), '%Y-%m-%d')
+            refdate = pytz.timezone('America/Sao_Paulo').localize(refdate)
+            refdate = refdate.replace(microsecond=1)
+            res = download_by_config(input_data, save_file_to_output_bucket, refdate=refdate)
+        else:
+            res = download_by_config(input_data, save_file_to_output_bucket)
         topic_name = get_env_var('DOWNLOAD_LOG_TOPIC')
         publisher = pubsub_v1.PublisherClient()
         future = publisher.publish(topic_name, bytes(json.dumps(res), 'utf-8'))
         res = future.result()
-        logging.info('DownloagLog message sent to pubsub %s', res)
+        logging.info('DownloadLog message sent to pubsub %s', res)
     except Exception as ex:
         logging.error(ex)
 
@@ -78,6 +86,7 @@ def gcf_ignite_generic_downloads(request):
     blobs = list(config_bucket.list_blobs(prefix=filter_prefix))
 
     _filter = request.args.get('filter')
+    _refdate = request.args.get('refdate')
     publisher = pubsub_v1.PublisherClient()
     for blob in blobs:
         if blob.path.endswith('%2F'):
@@ -85,7 +94,10 @@ def gcf_ignite_generic_downloads(request):
         if _filter and _filter not in blob.path:
             continue
         logging.info('publishing %s', blob.path)
-        publisher.publish(topic_name, blob.download_as_string())
+        if _refdate:
+            publisher.publish(topic_name, blob.download_as_string(), refdate=_refdate)
+        else:
+            publisher.publish(topic_name, blob.download_as_string())
 
 
 def gcf_save_download_logs(event, context):

@@ -1,5 +1,6 @@
 
 import os
+import re
 import os.path
 import logging
 import tempfile
@@ -29,7 +30,7 @@ def download_by_config(config_data, save_func, refdate=None):
     config = json.loads(config_data)
     logging.info('content = %s', config)
     downloader = downloader_factory(**config)
-    download_time = datetime.now(timezone.utc).isoformat()
+    download_time = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
     logging.info('Download weekdays %s', config.get('download_weekdays'))
     if config.get('download_weekdays') and downloader.now.weekday() not in config.get('download_weekdays'):
         logging.info('Not a date to download. Weekday %s Download Weekdays %s', downloader.now.weekday(), config.get('download_weekdays'))
@@ -59,7 +60,7 @@ def download_by_config(config_data, save_func, refdate=None):
             'message': msg,
             'download_status': status_code,
             'status': status,
-            'refdate': refdate and refdate.isoformat(),
+            'refdate': refdate and refdate.strftime('%Y-%m-%dT%H:%M:%S.%f%z'),
             'filename': fname,
             'bucket': config['output_bucket'],
             'name': config['name'],
@@ -118,7 +119,7 @@ class SingleDownloader(ABC):
 class RawURLDownloader(SingleDownloader):
     def download(self, refdate=None):
         self._url = self.attrs['url']
-        _, tfile, status_code = download_url(self._url)
+        _, tfile, status_code, res = download_url(self._url)
         if status_code != 200:
             return None, None, status_code, None
         fname = self.get_fname(None, self.now)
@@ -132,11 +133,14 @@ class FormatDateURLDownloader(SingleDownloader):
         logging.debug("SELF NOW %s", self.now)
         logging.debug("TIMEDELTA %s", self.attrs.get('timedelta', 0))
         self._url = refdate.strftime(self.attrs['url'])
-        _, tfile, status_code = download_url(self._url)
+        _, tfile, status_code, res = download_url(self._url)
         if status_code != 200:
             return None, None, status_code, refdate
         if self.attrs.get('use_filename'):
             _, fname = os.path.split(self._url)
+        elif self.attrs.get('use_content_disposition'):
+            cd = res.headers['content-disposition']
+            fname = re.findall('filename="(.+)";', cd)[0]
         else:
             _, ext = os.path.splitext(self._url)
             ext = ext if ext != '' else '.{}'.format(self.attrs['ext'])
@@ -165,7 +169,7 @@ class FundosInfDiarioDownloader(SingleDownloader):
         refdate = refdate or self.now + timedelta(self.attrs.get('timedelta', 0))
         refmonth = get_month(refdate, self.attrs['month_reference'])
         self._url = refmonth.strftime(self.attrs['url'])
-        _, tfile, status_code = download_url(self._url)
+        _, tfile, status_code, res = download_url(self._url)
         if status_code != 200:
             return None, None, status_code, refdate
         _, ext = os.path.splitext(self._url)
@@ -196,7 +200,7 @@ class PreparedURLDownloader(SingleDownloader):
         return f_fname, temp_file, status_code, refdate
 
     def _download_unzip_historical_data(self, url):
-        _, temp, status_code = download_url(url)
+        _, temp, status_code, res = download_url(url)
         if status_code != 200:
             return None, None, status_code
         zf = zipfile.ZipFile(temp)
@@ -224,5 +228,5 @@ def download_url(url):
     temp = tempfile.TemporaryFile()
     temp.write(res.content)
     temp.seek(0)
-    return None, temp, res.status_code
+    return None, temp, res.status_code, res
 
