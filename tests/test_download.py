@@ -13,22 +13,22 @@ logging.basicConfig(level=logging.DEBUG)
 # logging.basicConfig(level=logging.INFO)
 
 
-dt = None # datetime.date(2020, 7, 7)
+dt = datetime.date(2020, 8, 2)
 
-with open('../config/td_ntnb.json') as fp:
-    config = fp.read()
-    res = dw.download_by_config(config, dw.save_file_to_temp_folder, refdate=dt)
-    save_download_logs(res)
+# with open('../config/td_ntnb.json') as fp:
+#     config = fp.read()
+#     res = dw.download_by_config(config, dw.save_file_to_temp_folder, refdate=dt)
+#     save_download_logs(res)
 
 # with open('../config/vna_anbima.json') as fp:
 #     config = fp.read()
 #     res = dw.download_by_config(config, dw.save_file_to_temp_folder, refdate=dt)
 #     save_download_logs(res)
 
-# with open('../config/titpub_anbima.json') as fp:
-#     config = fp.read()
-#     res = dw.download_by_config(config, dw.save_file_to_temp_folder, refdate=dt)
-#     save_download_logs(res)
+with open('../config/titpub_anbima.json') as fp:
+    config = fp.read()
+    res = dw.download_by_config(config, dw.save_file_to_temp_folder, refdate=dt)
+    save_download_logs(res)
 
 # with open('../config/pricereport.json') as fp:
 #     config = fp.read()

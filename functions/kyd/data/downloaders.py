@@ -224,7 +224,7 @@ def download_url(url):
     logg = logging.warn if res.status_code != 200 else logging.info
     logg(msg)
     if res.status_code != 200:
-        return None, None, res.status_code
+        return None, None, res.status_code, res
     temp = tempfile.TemporaryFile()
     temp.write(res.content)
     temp.seek(0)
