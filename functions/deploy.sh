@@ -1,4 +1,5 @@
 gcloud functions deploy kyd-generic-download \
+    --timeout 540s \
     --entry-point gcf_generic_download \
     --runtime python37 \
     --trigger-topic kyd-storage-config \
