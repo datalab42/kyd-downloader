@@ -7,3 +7,4 @@ lxml==4.3.0
 cssselect==1.0.3
 pytz==2019.2
 bizdays
+sendgrid==6.7.0

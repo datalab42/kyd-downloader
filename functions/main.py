@@ -18,6 +18,7 @@ from google.cloud import datastore
 
 from kyd.data.downloaders import downloader_factory, download_by_config
 from kyd.data.logs import save_download_logs
+from kyd.mail import sendmail
 
 
 # TODO: this function saves the file to bucket based on its configuration
@@ -108,3 +109,8 @@ def gcf_save_download_logs(event, context):
     except Exception as ex:
         logging.error(ex)
 
+
+def gcf_sendmail(request):
+    SP_TZ = pytz.timezone('America/Sao_Paulo')
+    date = datetime.now(SP_TZ)
+    sendmail(date)
