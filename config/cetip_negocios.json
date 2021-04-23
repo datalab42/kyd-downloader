@@ -1,0 +1,7 @@
+{
+    "url": "https://www2.cetip.com.br/NegociosRegistrados/",
+    "name": "cetip_negocios_registrados",
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "CetipNegociosRegistrados",
+    "ext": "html"
+}
