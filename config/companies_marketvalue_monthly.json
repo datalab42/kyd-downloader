@@ -1,0 +1,9 @@
+{
+    "url": "http://www.b3.com.br/data/files/B2/25/D1/45/38B03710FD0FA037AC094EA8/VM_Mensal%20-%20%Y-%m-%d.xlsx",
+    "name": "companies_marketvalue_monthly",
+    "type": "datetime",
+    "timedelta": -1,
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "CompaniesMarketValueMonthly",
+    "ext": "xlsx"
+}
