@@ -14,11 +14,9 @@ UTC = pytz.utc
 
 HEADER = {
     'name': 'Name',
-    'time': 'Time',
     'refdate': 'Refdate',
     'download_status': 'DownloadStatus',
     'status': 'Status',
-    'filename': 'Filename',
     'message': 'Message',
 }
 
@@ -114,5 +112,5 @@ def sendmail(date):
 
 if __name__ == '__main__':
     import datetime
-    sendmail(datetime.datetime(2021, 4, 22))
+    sendmail(datetime.datetime(2021, 4, 29))
     # print(getdata(datetime.datetime(2021, 4, 21)).__html__())
