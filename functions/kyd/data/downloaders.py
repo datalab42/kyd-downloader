@@ -208,7 +208,7 @@ class PreparedURLDownloader(SingleDownloader):
         nl = zf.namelist()
         if len(nl) == 0:
             logging.error('zip file is empty url = {}'.format(url))
-            return None, None, 404
+            return None, None, 204
         name = nl[0]
         content = zf.read(name) # bytes
         zf.close()
