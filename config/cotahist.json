@@ -1,6 +1,7 @@
 {
     "url": "http://bvmf.bmfbovespa.com.br/InstDados/SerHist/COTAHIST_A%Y.ZIP",
     "name": "cotahist",
+    "download_weekdays": [0,1,2,3,4],
     "type": "datetime",
     "output_bucket": "ks-rawdata-bovespa",
     "prefix": "COTAHIST_ZIP",

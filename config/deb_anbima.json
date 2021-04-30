@@ -2,7 +2,7 @@
     "url": "https://www.anbima.com.br/informacoes/merc-sec-debentures/arqs/db%y%m%d.txt",
     "name": "deb_anbima",
     "type": "datetime",
-    "timedelta": -1,
+    "download_weekdays": [0,1,2,3,4],
     "output_bucket": "ks-rawdata-anbima-deb",
     "ext": "txt"
 }

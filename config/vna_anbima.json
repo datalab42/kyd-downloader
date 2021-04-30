@@ -1,5 +1,6 @@
 {
     "url": "https://www.anbima.com.br/informacoes/vna/vna.asp",
     "name": "vna_anbima",
+    "download_weekdays": [0,1,2,3,4],
     "output_bucket": "ks-rawdata-anbima-vnatitpub"
 }

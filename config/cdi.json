@@ -1,6 +1,7 @@
 {
     "url": "https://www2.cetip.com.br/ConsultarTaxaDi/ConsultarTaxaDICetip.aspx",
     "name": "cdi",
+    "download_weekdays": [0,1,2,3,4],
     "output_bucket": "ks-rawdata-b3",
     "prefix": "TaxaCDI",
     "ext": "json"

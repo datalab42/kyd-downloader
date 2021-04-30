@@ -2,6 +2,7 @@
     "url": "http://www.b3.com.br/pesquisapregao/download?filelist={ftype}{date}.zip",
     "name": "cadinstr",
     "type": "prepared",
+    "download_weekdays": [0,1,2,3,4],
     "parameters": {
         "ftype": "IN",
         "date": {

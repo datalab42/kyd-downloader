@@ -2,6 +2,7 @@
     "url": "http://www.b3.com.br/data/files/0C/71/AA/93/5E843710DB551337AC094EA8/VMDiadet%%20-%%20%Y-%m-%d.xlsx",
     "name": "companies_marketvalue_daily",
     "type": "datetime",
+    "download_weekdays": [1,2,3,4,5],
     "timedelta": -1,
     "output_bucket": "ks-rawdata-b3",
     "prefix": "CompaniesMarketValueDaily",
