@@ -67,6 +67,7 @@ def download_by_config(config_data, save_func, refdate=None):
             'time': download_time
         }
     except Exception as ex:
+        logging.error(str(ex))
         return {
             'message': str(ex),
             'download_status': -1,
