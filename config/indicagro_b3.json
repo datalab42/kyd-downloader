@@ -1,0 +1,8 @@
+{
+    "url": "http://www.b3.com.br/pt_br/market-data-e-indices/servicos-de-dados/market-data/consultas/mercado-de-derivativos/indicadores/indicadores-agropecuarios/",
+    "name": "indicagro",
+    "download_weekdays": [0,1,2,3,4],
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "IndicadoresAgro",
+    "ext": "html"
+}
