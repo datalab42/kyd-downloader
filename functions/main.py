@@ -95,10 +95,14 @@ def gcf_ignite_generic_downloads(request):
         if _filter and _filter not in blob.path:
             continue
         logging.info('publishing %s', blob.path)
+        content = blob.download_as_string()
+        config = json.loads(content)
+        if _filter:
+            config.pop('download_weekdays', None)
         if _refdate:
-            publisher.publish(topic_name, blob.download_as_string(), refdate=_refdate)
+            publisher.publish(topic_name, json.dumps(config), refdate=_refdate)
         else:
-            publisher.publish(topic_name, blob.download_as_string())
+            publisher.publish(topic_name, json.dumps(config))
 
 
 def gcf_save_download_logs(event, context):
