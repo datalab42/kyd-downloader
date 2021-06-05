@@ -21,6 +21,8 @@ def downloader_factory(**kwargs):
         return PreparedURLDownloader(**kwargs)
     elif kwargs.get('type') == 'fundos_inf_diario':
         return FundosInfDiarioDownloader(**kwargs)
+    elif kwargs.get('type') == 'b3files':
+        return B3FilesURLDownloader(**kwargs)
     else:
         raise ValueError('Invalid downloader type %s', kwargs.get('type'))
 
@@ -217,6 +219,24 @@ class PreparedURLDownloader(SingleDownloader):
         temp.write(content)
         temp.seek(0)
         return name, temp, status_code
+
+
+class B3FilesURLDownloader(SingleDownloader):
+    def download(self, refdate=None):
+        filename = self.attrs.get('filename')
+        refdate = refdate or self.now + timedelta(self.attrs.get('timedelta', 0))
+        date = refdate.strftime('%Y-%m-%d')
+        url = f'https://arquivos.b3.com.br/api/download/requestname?fileName={filename}&date={date}&recaptchaToken='
+        res = requests.get(url)
+        if res.status_code != 200:
+            return None, None, res.status_code, refdate
+        ret = res.json()
+        url = f'https://arquivos.b3.com.br/api/download/?token={ret["token"]}'
+        fname, temp_file, status_code, res = download_url(url)
+        if res.status_code != 200:
+            return None, None, res.status_code, refdate
+        f_fname = self.get_fname(fname, refdate)
+        return f_fname, temp_file, status_code, refdate
 
 
 def download_url(url):
