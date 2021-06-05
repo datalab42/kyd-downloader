@@ -1,0 +1,10 @@
+{
+    "name": "b3-lending-open-position",
+    "type": "b3files",
+    "download_weekdays": [0,1,2,3,4],
+    "offset": -1,
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "LendingOpenPosition",
+    "filename": "LendingOpenPosition",
+    "ext": "csv"
+}

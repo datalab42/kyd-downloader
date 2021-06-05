@@ -1,0 +1,9 @@
+{
+    "name": "b3-instruments-consolidated",
+    "type": "b3files",
+    "download_weekdays": [0,1,2,3,4],
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "InstrumentsConsolidated",
+    "filename": "InstrumentsConsolidated",
+    "ext": "csv"
+}
