@@ -228,6 +228,9 @@ class B3FilesURLDownloader(SingleDownloader):
         date = refdate.strftime('%Y-%m-%d')
         url = f'https://arquivos.b3.com.br/api/download/requestname?fileName={filename}&date={date}&recaptchaToken='
         res = requests.get(url)
+        msg = 'status_code = {} url = {}'.format(res.status_code, url)
+        logg = logging.warn if res.status_code != 200 else logging.info
+        logg(msg)
         if res.status_code != 200:
             return None, None, res.status_code, refdate
         ret = res.json()
