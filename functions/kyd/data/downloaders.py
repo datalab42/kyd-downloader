@@ -8,6 +8,7 @@ import zipfile
 from datetime import datetime, timedelta, date, timezone
 from abc import ABC, abstractmethod
 import json
+import bizdays
 
 import pytz
 import requests
@@ -222,9 +223,11 @@ class PreparedURLDownloader(SingleDownloader):
 
 
 class B3FilesURLDownloader(SingleDownloader):
+    calendar = bizdays.Calendar.load('ANBIMA.cal')
     def download(self, refdate=None):
         filename = self.attrs.get('filename')
-        refdate = refdate or self.now + timedelta(self.attrs.get('timedelta', 0))
+        refdate = refdate or self.calendar.offset(self.now, self.attrs.get('offset', 0))
+        logging.info('refdate %s', refdate)
         date = refdate.strftime('%Y-%m-%d')
         url = f'https://arquivos.b3.com.br/api/download/requestname?fileName={filename}&date={date}&recaptchaToken='
         res = requests.get(url)
