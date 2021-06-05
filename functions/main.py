@@ -99,10 +99,11 @@ def gcf_ignite_generic_downloads(request):
         config = json.loads(content)
         if _filter:
             config.pop('download_weekdays', None)
+        bin_content = json.dumps(config).encode('utf8')
         if _refdate:
-            publisher.publish(topic_name, json.dumps(config), refdate=_refdate)
+            publisher.publish(topic_name, bin_content, refdate=_refdate)
         else:
-            publisher.publish(topic_name, json.dumps(config))
+            publisher.publish(topic_name, bin_content)
 
 
 def gcf_save_download_logs(event, context):
