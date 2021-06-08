@@ -61,11 +61,12 @@ def gcf_generic_download(event, context):
             res = download_by_config(input_data, save_file_to_output_bucket, refdate=refdate)
         else:
             res = download_by_config(input_data, save_file_to_output_bucket)
+        logging.info('Download Status %s', res)
         topic_name = get_env_var('DOWNLOAD_LOG_TOPIC')
         publisher = pubsub_v1.PublisherClient()
         future = publisher.publish(topic_name, bytes(json.dumps(res), 'utf-8'))
         res = future.result()
-        logging.info('DownloadLog message sent to pubsub %s', res)
+        logging.info('DownloadLog message sent to pubsub %s:%s', topic_name, res)
     except Exception as ex:
         logging.error(ex)
 

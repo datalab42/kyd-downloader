@@ -226,7 +226,7 @@ class B3FilesURLDownloader(SingleDownloader):
     calendar = bizdays.Calendar.load('ANBIMA.cal')
     def download(self, refdate=None):
         filename = self.attrs.get('filename')
-        refdate = refdate or self.calendar.offset(self.now, self.attrs.get('offset', 0))
+        refdate = refdate or self.get_refdate()
         logging.info('refdate %s', refdate)
         date = refdate.strftime('%Y-%m-%d')
         url = f'https://arquivos.b3.com.br/api/download/requestname?fileName={filename}&date={date}&recaptchaToken='
@@ -242,7 +242,15 @@ class B3FilesURLDownloader(SingleDownloader):
         if res.status_code != 200:
             return None, None, res.status_code, refdate
         f_fname = self.get_fname(fname, refdate)
+        logging.info('Returned from download %s %s %s %s', f_fname, temp_file, status_code, refdate)
         return f_fname, temp_file, status_code, refdate
+
+    def get_refdate(self):
+        offset = self.attrs.get('offset', 0)
+        refdate = self.calendar.offset(self.now, offset)
+        refdate = datetime(refdate.year, refdate.month, refdate.day)
+        refdate = pytz.timezone('America/Sao_Paulo').localize(refdate)
+        return refdate
 
 
 def download_url(url):
