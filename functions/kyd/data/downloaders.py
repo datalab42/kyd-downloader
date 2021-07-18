@@ -24,6 +24,8 @@ def downloader_factory(**kwargs):
         return FundosInfDiarioDownloader(**kwargs)
     elif kwargs.get('type') == 'b3files':
         return B3FilesURLDownloader(**kwargs)
+    elif kwargs.get('type') == 'anbima-vna':
+        return VnaAnbimaURLDownloader(**kwargs)
     else:
         raise ValueError('Invalid downloader type %s', kwargs.get('type'))
 
@@ -242,6 +244,44 @@ class B3FilesURLDownloader(SingleDownloader):
         if res.status_code != 200:
             return None, None, res.status_code, refdate
         f_fname = self.get_fname(fname, refdate)
+        logging.info('Returned from download %s %s %s %s', f_fname, temp_file, status_code, refdate)
+        return f_fname, temp_file, status_code, refdate
+
+    def get_refdate(self):
+        offset = self.attrs.get('offset', 0)
+        refdate = self.calendar.offset(self.now, offset)
+        refdate = datetime(refdate.year, refdate.month, refdate.day)
+        refdate = pytz.timezone('America/Sao_Paulo').localize(refdate)
+        return refdate
+
+
+class VnaAnbimaURLDownloader(SingleDownloader):
+    calendar = bizdays.Calendar.load('ANBIMA.cal')
+    def download(self, refdate=None):
+        filename = self.attrs.get('filename')
+        refdate = refdate or self.get_refdate()
+        logging.info('refdate %s', refdate)
+        date = refdate.strftime('%Y-%m-%d')
+        url = 'https://www.anbima.com.br/informacoes/vna/vna.asp'
+        body = {
+            'Data': refdate.strftime('%d%m%Y'),
+            'escolha': "1",
+            'Idioma': "PT",
+            'saida': "txt",
+            'Dt_Ref_Ver': refdate.strftime('%Y%m%d'),
+            'Inicio': refdate.strftime('%d/%m/%Y')
+        }
+        res = requests.post(url, params=body)
+        msg = 'status_code = {} url = {}'.format(res.status_code, url)
+        logg = logging.warn if res.status_code != 200 else logging.info
+        logg(msg)
+        if res.status_code != 200:
+            return None, None, res.status_code, refdate
+        status_code = res.status_code
+        temp_file = tempfile.TemporaryFile()
+        temp_file.write(res.content)
+        temp_file.seek(0)
+        f_fname = self.get_fname(None, refdate)
         logging.info('Returned from download %s %s %s %s', f_fname, temp_file, status_code, refdate)
         return f_fname, temp_file, status_code, refdate
 
