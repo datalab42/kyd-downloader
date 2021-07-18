@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <table id="data" class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Time</th>
+        <th>Refdate</th>
+        <th>DownloadStatus</th>
+        <th>Status</th>
+        <th>Filename</th>
+        <th>Message</th>
+        <th>URL</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.name }}</td>
+          <td>{{ log.time }}</td>
+          <td>{{ log.refdate }}</td>
+          <td>{{ log.download_status }}</td>
+          <td>{{ log.status }}</td>
+          <td>{{ log.filename }}</td>
+          <td>{{ log.message }}</td>
+          <td><a href="{{ log.url }}">Link</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

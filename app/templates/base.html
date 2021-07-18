@@ -18,8 +18,6 @@
           <form method="GET" action="/">
             <label for="start">Date:</label>
             <input type="date" id="start" name="date" value="{{date.strftime('%Y-%m-%d')}}">
-            <input type="hidden" name="sort" value="{{sort}}">
-            <input type="hidden" name="direction" value="{{direction}}">
             &nbsp;&nbsp;&nbsp;
             <label for="start">Filter:</label>
             &nbsp;
@@ -28,12 +26,23 @@
             <input type="checkbox" name="status" id="status1" value="1"   {{ 'checked' if 1 in status else ''  }}>&nbsp;<label for="status1">1</label>&nbsp;
             <input type="checkbox" name="status" id="status2" value="2"   {{ 'checked' if 2 in status else ''  }}>&nbsp;<label for="status2">2</label>&nbsp;
             &nbsp;&nbsp;&nbsp;
+            <label for="taskname">Nome da Tarefa:</label>&nbsp;
+            <select name="taskname" id="taskname">
+              {%for name in names %}
+              <option value="{{name}}" {{ "selected" if name == taskname else '' }}>{{name}}</option>
+              {% endfor %}
+            </select>
+            &nbsp;&nbsp;&nbsp;
+            <label for="compress">Comprimir:</label>&nbsp;
+            <input type="checkbox" name="compress" id="compress" value="1" {{ "checked" if compress else '' }}>&nbsp;
+            &nbsp;&nbsp;&nbsp;
+
             <input type="submit" value="Send">
           </form>
         </div>
         <!-- <div>Date: {{date.isoformat()}}</div> -->
         <div>Total: {{length}}</div>
-          {{ table }}
+        {% block content %}{% endblock %}
       </section>
     </div>
     <!-- Optional JavaScript -->
@@ -41,5 +50,15 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#data').DataTable({
+          "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]]
+        });
+      });
+    </script>
   </body>
 </html>
