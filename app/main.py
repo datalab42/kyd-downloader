@@ -10,7 +10,7 @@ from flask_table import Table, Col
 from flask_table.html import element
 import requests
 
-from google.cloud import storage
+# from google.cloud import storage
 from google.cloud import datastore
 import google.oauth2.id_token
 import google.auth.transport.requests
