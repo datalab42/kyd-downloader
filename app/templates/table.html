@@ -17,14 +17,14 @@
     <tbody>
       {% for log in logs %}
         <tr>
-          <td>{{ log.name }}</td>
-          <td>{{ log.time }}</td>
+          <td class="col-md-2">{{ log.name }}</td>
+          <td class="col-md-2">{{ log.time }}</td>
           <td>{{ log.refdate }}</td>
           <td>{{ log.download_status }}</td>
           <td>{{ log.status }}</td>
-          <td>{{ log.filename }}</td>
-          <td>{{ log.message }}</td>
-          <td><a href="{{ log.url }}">Link</a></td>
+          <td class="col-md-3">{{ log.filename }}</td>
+          <td class="col-md-2">{{ log.message }}</td>
+          <td class="col-md-1"><a href="{{ log.url }}">Link</a></td>
         </tr>
       {% endfor %}
     </tbody>
