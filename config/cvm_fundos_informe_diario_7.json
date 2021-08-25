@@ -4,7 +4,6 @@
     "type": "fundos_inf_diario",
     "timedelta": -1,
     "month_reference": -7,
-    "download_weekdays": [0],
     "output_bucket": "ks-rawdata-cvm",
     "prefix": "fundos/inf_diario_fi",
     "ext": "csv"

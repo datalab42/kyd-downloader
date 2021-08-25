@@ -1,0 +1,8 @@
+{
+    "url": "http://dados.cvm.gov.br/dados/CIA_ABERTA/CAD/DADOS/cad_cia_aberta.csv",
+    "type": "static-file",
+    "name": "cvm_cias_abertas_dados_cadastrais",
+    "output_bucket": "ks-rawdata-cvm",
+    "prefix": "cias/cad_fi",
+    "ext": "csv"
+}

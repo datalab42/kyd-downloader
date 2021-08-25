@@ -1,5 +1,6 @@
 {
     "url": "http://dados.cvm.gov.br/dados/FI/CAD/DADOS/cad_fi.csv",
+    "type": "static-file",
     "name": "cvm_fundos_info_cadastral",
     "output_bucket": "ks-rawdata-cvm",
     "prefix": "fundos/inf_cadastral_fi",
