@@ -1,22 +1,15 @@
 
 import os
-import csv
 import json
 import base64
 import logging
-import tempfile
 from datetime import datetime
-from itertools import dropwhile
-from io import StringIO
-
-import lxml.html
 import pytz
 
 from google.cloud import storage
 from google.cloud import pubsub_v1
-from google.cloud import datastore
 
-from kyd.data.downloaders import downloader_factory, download_by_config
+from kyd.data.downloaders import download_by_config
 from kyd.data.logs import save_download_logs
 from kyd.mail import sendmail
 
