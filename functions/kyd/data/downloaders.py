@@ -141,7 +141,8 @@ class FormatDateURLDownloader(SingleDownloader):
         logging.debug("SELF NOW %s", self.now)
         logging.debug("TIMEDELTA %s", self.attrs.get('timedelta', 0))
         self._url = refdate.strftime(self.attrs['url'])
-        _, tfile, status_code, res = download_url(self._url)
+        verify_ssl = self.attrs.get('verify_ssl', True)
+        _, tfile, status_code, res = download_url(self._url, verify_ssl=verify_ssl)
         if status_code != 200:
             return None, None, status_code, refdate
         if self.attrs.get('use_filename'):
@@ -333,8 +334,8 @@ class VnaAnbimaURLDownloader(SingleDownloader):
         return refdate
 
 
-def download_url(url):
-    res = requests.get(url)
+def download_url(url, verify_ssl=True):
+    res = requests.get(url, verify=verify_ssl)
     msg = 'status_code = {} url = {}'.format(res.status_code, url)
     logg = logging.warn if res.status_code != 200 else logging.info
     logg(msg)
