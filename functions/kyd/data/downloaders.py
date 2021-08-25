@@ -26,6 +26,8 @@ def downloader_factory(**kwargs):
         return B3FilesURLDownloader(**kwargs)
     elif kwargs.get('type') == 'anbima-vna':
         return VnaAnbimaURLDownloader(**kwargs)
+    elif kwargs.get('type') == 'static-file':
+        return StaticFileDownloader(**kwargs)
     else:
         raise ValueError('Invalid downloader type %s', kwargs.get('type'))
 
@@ -170,19 +172,57 @@ def get_month(dt, monthdelta):
     return first
 
 
-class FundosInfDiarioDownloader(SingleDownloader):
+class StaticFileDownloader(SingleDownloader):
+    SP_TZ = pytz.timezone('America/Sao_Paulo')
+    def get_url(self, refdate):
+        return self.attrs['url']
+
+    def get_fname2(self, refdate):
+        if self.attrs.get('ext'):
+            ext = '.{}'.format(self.attrs['ext'])
+        else:
+            _, ext = os.path.splitext(self._url)
+        fname = '{}{}'.format(refdate.strftime('%Y-%m-%d'), ext)
+        return fname
+
     def download(self, refdate=None):
-        refdate = refdate or self.now + timedelta(self.attrs.get('timedelta', 0))
-        refmonth = get_month(refdate, self.attrs['month_reference'])
-        self._url = refmonth.strftime(self.attrs['url'])
+        self._url = self.get_url(refdate)
         _, tfile, status_code, res = download_url(self._url)
+        refdate = datetime.strptime(res.headers['last-modified'], '%a, %d %b %Y %H:%M:%S %Z')
+        refdate = pytz.UTC.localize(refdate).astimezone(self.SP_TZ)
         if status_code != 200:
             return None, None, status_code, refdate
-        _, ext = os.path.splitext(self._url)
-        ext = ext if ext != '' else '.{}'.format(self.attrs['ext'])
-        fname = '{}/{}{}'.format(refmonth.strftime('%Y-%m'), refdate.strftime('%Y-%m-%d'), ext)
+
+        fname = self.get_fname2(refdate)
         f_fname = self.get_fname(fname, refdate)
         return f_fname, tfile, status_code, refdate
+
+
+class FormatDateStaticFileDownloader(StaticFileDownloader):
+    def get_url(self, refdate):
+        refdate = refdate or self.now + timedelta(self.attrs.get('timedelta', 0))
+        logging.debug("REFDATE %s", refdate)
+        logging.debug("SELF NOW %s", self.now)
+        logging.debug("TIMEDELTA %s", self.attrs.get('timedelta', 0))
+        return refdate.strftime(self.attrs['url'])
+
+
+class FundosInfDiarioDownloader(StaticFileDownloader):
+    def get_refmonth(self):
+        return get_month(self.now, self.attrs['month_reference'])
+
+    def get_url(self, refdate):
+        refmonth = self.get_refmonth()
+        return refmonth.strftime(self.attrs['url'])
+
+    def get_fname2(self, refdate):
+        if self.attrs.get('ext'):
+            ext = '.{}'.format(self.attrs['ext'])
+        else:
+            _, ext = os.path.splitext(self._url)
+        refmonth = self.get_refmonth()
+        fname = '{}/{}{}'.format(refmonth.strftime('%Y-%m'), refdate.strftime('%Y-%m-%d'), ext)
+        return fname
 
 
 class PreparedURLDownloader(SingleDownloader):
