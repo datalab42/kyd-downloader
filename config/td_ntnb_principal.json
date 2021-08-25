@@ -4,5 +4,6 @@
     "type": "datetime",
     "output_bucket": "ks-rawdata-td",
     "prefix": "NTN-B-Principal",
-    "use_content_disposition": true
+    "use_content_disposition": true,
+    "verify_ssl": false
 }
