@@ -8,6 +8,7 @@ import zipfile
 from datetime import datetime, timedelta, date, timezone
 from abc import ABC, abstractmethod
 import json
+import base64
 import bizdays
 
 import pytz
@@ -28,6 +29,8 @@ def downloader_factory(**kwargs):
         return VnaAnbimaURLDownloader(**kwargs)
     elif kwargs.get('type') == 'static-file':
         return StaticFileDownloader(**kwargs)
+    elif kwargs.get('type') == 'b3-stock-index-info':
+        return B3StockIndexInfoDownloader(**kwargs)
     else:
         raise ValueError('Invalid downloader type %s', kwargs.get('type'))
 
@@ -294,6 +297,24 @@ class B3FilesURLDownloader(SingleDownloader):
         refdate = datetime(refdate.year, refdate.month, refdate.day)
         refdate = pytz.timezone('America/Sao_Paulo').localize(refdate)
         return refdate
+
+
+class B3StockIndexInfoDownloader(SingleDownloader):
+    calendar = bizdays.Calendar.load('ANBIMA.cal')
+    def download(self, refdate=None):
+        params = json.dumps({
+            'pageNumber': 1,
+            'pageSize': 9999
+        })
+        params_enc = base64.encodebytes(bytes(params, 'utf8')).decode('utf8').strip()
+        url = f'https://sistemaswebb3-listados.b3.com.br/indexProxy/indexCall/GetStockIndex/{params_enc}'
+        verify_ssl = self.attrs.get('verify_ssl', True)
+        fname, temp_file, status_code, res = download_url(url, verify_ssl=verify_ssl)
+        if res.status_code != 200:
+            return None, None, res.status_code, refdate
+        f_fname = self.get_fname(None, self.now)
+        logging.info('Returned from download %s %s %s %s', f_fname, temp_file, status_code, refdate)
+        return f_fname, temp_file, status_code, refdate
 
 
 class VnaAnbimaURLDownloader(SingleDownloader):

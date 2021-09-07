@@ -1,0 +1,10 @@
+{
+    "name": "b3-stock-index-info",
+    "type": "b3-stock-index-info",
+    "download_weekdays": [0,1,2,3,4],
+    "offset": 0,
+    "output_bucket": "ks-rawdata-b3",
+    "prefix": "StockIndexInfo",
+    "ext": "json",
+    "verify_ssl": false
+}
