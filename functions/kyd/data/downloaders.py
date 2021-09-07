@@ -320,10 +320,8 @@ class B3StockIndexInfoDownloader(SingleDownloader):
 class VnaAnbimaURLDownloader(SingleDownloader):
     calendar = bizdays.Calendar.load('ANBIMA.cal')
     def download(self, refdate=None):
-        filename = self.attrs.get('filename')
         refdate = refdate or self.get_refdate()
         logging.info('refdate %s', refdate)
-        date = refdate.strftime('%Y-%m-%d')
         url = 'https://www.anbima.com.br/informacoes/vna/vna.asp'
         body = {
             'Data': refdate.strftime('%d%m%Y'),
