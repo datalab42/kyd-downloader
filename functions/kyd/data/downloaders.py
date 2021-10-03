@@ -130,7 +130,8 @@ class SingleDownloader(ABC):
 class RawURLDownloader(SingleDownloader):
     def download(self, refdate=None):
         self._url = self.attrs['url']
-        _, tfile, status_code, res = download_url(self._url)
+        verify_ssl = self.attrs.get('verify_ssl', True)
+        _, tfile, status_code, res = download_url(self._url, verify_ssl=verify_ssl)
         if status_code != 200:
             return None, None, status_code, None
         fname = self.get_fname(None, self.now)
@@ -191,7 +192,8 @@ class StaticFileDownloader(SingleDownloader):
 
     def download(self, refdate=None):
         self._url = self.get_url(refdate)
-        _, tfile, status_code, res = download_url(self._url)
+        verify_ssl = self.attrs.get('verify_ssl', True)
+        _, tfile, status_code, res = download_url(self._url, verify_ssl=verify_ssl)
         refdate = datetime.strptime(res.headers['last-modified'], '%a, %d %b %Y %H:%M:%S %Z')
         refdate = pytz.UTC.localize(refdate).astimezone(self.SP_TZ)
         if status_code != 200:
@@ -250,7 +252,8 @@ class PreparedURLDownloader(SingleDownloader):
         return f_fname, temp_file, status_code, refdate
 
     def _download_unzip_historical_data(self, url):
-        _, temp, status_code, res = download_url(url)
+        verify_ssl = self.attrs.get('verify_ssl', True)
+        _, temp, status_code, res = download_url(url, verify_ssl=verify_ssl)
         if status_code != 200:
             return None, None, status_code
         zf = zipfile.ZipFile(temp)
@@ -284,7 +287,8 @@ class B3FilesURLDownloader(SingleDownloader):
             return None, None, res.status_code, refdate
         ret = res.json()
         url = f'https://arquivos.b3.com.br/api/download/?token={ret["token"]}'
-        fname, temp_file, status_code, res = download_url(url)
+        verify_ssl = self.attrs.get('verify_ssl', True)
+        fname, temp_file, status_code, res = download_url(url, verify_ssl=verify_ssl)
         if res.status_code != 200:
             return None, None, res.status_code, refdate
         f_fname = self.get_fname(fname, refdate)
