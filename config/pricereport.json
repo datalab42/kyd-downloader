@@ -12,5 +12,6 @@
     },
     "output_bucket": "ks-rawdata-b3",
     "prefix": "PricingReport",
-    "ext": "zip"
+    "ext": "zip",
+    "verify_ssl": false
 }

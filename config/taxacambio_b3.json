@@ -4,5 +4,6 @@
     "download_weekdays": [0,1,2,3,4],
     "output_bucket": "ks-rawdata-b3",
     "prefix": "TaxaCambioReferencial",
-    "ext": "html"
+    "ext": "html",
+    "verify_ssl": false
 }

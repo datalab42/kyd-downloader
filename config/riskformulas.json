@@ -13,5 +13,6 @@
     },
     "output_bucket": "ks-rawdata-b3",
     "prefix": "RiskFormulas",
-    "ext": "zip"
+    "ext": "zip",
+    "verify_ssl": false
 }
